@@ -3,6 +3,7 @@ package com.joppu.webcam;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -49,12 +50,12 @@ public class ImageProcessingService {
     private void uploadImage(File file) throws Exception{
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
-            HttpPost httppost = new HttpPost("http://localhost:8080" +"/servlets-examples/servlet/RequestInfoExample");
+            HttpPost httppost = new HttpPost("http://localhost/imageupload");
 
             FileBody bin = new FileBody(file);
 
-            HttpEntity reqEntity = MultipartEntityBuilder.create()
-                    .addPart("bin", bin)
+            HttpEntity reqEntity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                    .addPart("file", bin)
                     .build();
 
             httppost.setEntity(reqEntity);
@@ -92,7 +93,7 @@ public class ImageProcessingService {
                 if (StandardWatchEventKinds.ENTRY_CREATE.equals(event.kind())) {
                     String fileName = event.context().toString();
                     System.out.println("File Created:" + fileName);
-                    processFile(fileName);
+                    processFile(path+"/"+fileName);
                 }
             }
             valid = watchKey.reset();

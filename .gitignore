@@ -17,3 +17,7 @@
 *.jpg
 
 .idea/workspace.xml
+
+*.iml
+
+*.iml
