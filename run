@@ -1,3 +1,7 @@
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
 export PATH=${JAVA_HOME}/bin:$PATH
-java -classpath bin/:lib/opencv-248.jar -Djava.library.path=lib/ com.joppu.webcam.MultipleVideoCapture
+export CLASSPATH=bin/:lib/opencv-248.jar
+export JAVA_LIBRARY=lib/
+java -classpath $CLASSPATH -Djava.library.path=$JAVA_LIBRARY com.joppu.webcam.MultipleVideoCapture 0
+echo
+java -classpath $CLASSPATH -Djava.library.path=$JAVA_LIBRARY com.joppu.webcam.MultipleVideoCapture 1

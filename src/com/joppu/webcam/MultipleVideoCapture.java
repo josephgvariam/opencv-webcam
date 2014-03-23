@@ -8,17 +8,28 @@ import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.SimpleFormatter;
 
 public class MultipleVideoCapture {
 
     private SimpleDateFormat simpleDateFormat;
 
-    private static MultipleVideoCapture multipleVideoCapture = new MultipleVideoCapture();
+    private static final MultipleVideoCapture multipleVideoCapture = new MultipleVideoCapture();
 
     public static void main(String[] args) throws Exception {
-        MultipleVideoCapture.getInstance().start();
+        if (args.length > 0) {
+            List<Integer> devices = new ArrayList<Integer>();
+
+            for (String s : args) {
+                devices.add(Integer.parseInt(s));
+            }
+
+            MultipleVideoCapture.getInstance().start(devices);
+        }
     }
 
     private MultipleVideoCapture(){
@@ -26,24 +37,17 @@ public class MultipleVideoCapture {
     }
 
     public static MultipleVideoCapture getInstance(){
-        if(multipleVideoCapture == null){
-            multipleVideoCapture = new MultipleVideoCapture();
-        }
-
         return multipleVideoCapture;
     }
 
-    private void start(){
+    private void start(List<Integer> devices){
         init();
 
-        int[] devices = new int[]{0, 1};
-
-        while (true) {
-            for(int device: devices){
-                captureFrame(device);
-                sleep(1000);
-            }
+        for(int device: devices){
+            captureFrame(device);
+            //sleep(1000);
         }
+
     }
 
     private void init() {
@@ -52,6 +56,8 @@ public class MultipleVideoCapture {
         //TODO: setup directory strucute and other misc initialization tasks
 
         simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+
+
     }
 
     private Mat captureFrame(int device) {
